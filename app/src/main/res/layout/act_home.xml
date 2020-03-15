@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    tools:context=".activity.ActHome">
+
+    <TextView
+        android:id="@+id/btnAddPhrases"
+        style="@style/ButtonStyle"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:text="@string/btn_add_phrases" />
+
+    <TextView
+        android:id="@+id/btnDisplayPhrases"
+        style="@style/ButtonStyle"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btnAddPhrases"
+        android:text="@string/btn_display_phrases" />
+
+    <TextView
+        android:id="@+id/btnEditPhrases"
+        style="@style/ButtonStyle"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btnDisplayPhrases"
+        android:text="@string/btn_edit_phrases" />
+
+    <TextView
+        android:id="@+id/btnLangSub"
+        style="@style/ButtonStyle"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btnEditPhrases"
+        android:text="@string/btn_lang_sub" />
+
+    <TextView
+        android:id="@+id/btnTranslate"
+        style="@style/ButtonStyle"
+        android:layout_width="300dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/btnLangSub"
+        android:layout_marginBottom="0dp"
+        android:text="@string/btn_translate" />
+
+</RelativeLayout>

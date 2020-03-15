@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+<!--    <color name="colorPrimary">@color/btn_bg</color>-->
+<!--    <color name="colorPrimaryDark">@color/btn_shadow</color>-->
+<!--    <color name="colorAccent">@color/btn_bg</color>-->
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="text_default">#808080</color>
+    <color name="btn_bg">#03A9F4</color>
+    <color name="btn_shadow">#0277BD</color>
+    <color name="transparent">#00000000</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#00FF00</color>
+    <color name="blue">#0000FF</color>
+
+    <color name="ic_launcher_background">@color/btn_bg</color>
+    <color name="btn_disabled">#90A4AE</color>
+</resources>

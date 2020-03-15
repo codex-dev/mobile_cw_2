@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Mobile Coursework 2</string>
+
+    <!--  button texts  -->
+    <string name="btn_add_phrases">Add Phrases</string>
+    <string name="btn_display_phrases">Display Phrases</string>
+    <string name="btn_edit_phrases">Edit Phrases</string>
+    <string name="btn_lang_sub">Language Subscription</string>
+    <string name="btn_translate">Translate</string>
+</resources>
