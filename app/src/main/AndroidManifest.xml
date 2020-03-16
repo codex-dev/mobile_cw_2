@@ -9,13 +9,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ActTranslate"></activity>
-        <activity android:name=".activity.ActLangSub" />
-        <activity android:name=".activity.ActDisplayPhrases" />
-        <activity android:name=".activity.ActEditPhrases" />
-        <activity android:name=".activity.ActCommon" />
-        <activity android:name=".activity.ActAddPhrases" />
-        <activity android:name=".activity.ActHome">
+        <activity android:name=".activity.ActTranslate"
+            android:windowSoftInputMode="stateHidden"/>
+        <activity android:name=".activity.ActLangSub"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ActDisplayPhrases"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ActEditPhrases"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ActCommon"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ActAddPhrases"
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activity.ActHome"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

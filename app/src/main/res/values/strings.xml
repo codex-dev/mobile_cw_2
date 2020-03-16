@@ -7,4 +7,12 @@
     <string name="btn_edit_phrases">Edit Phrases</string>
     <string name="btn_lang_sub">Language Subscription</string>
     <string name="btn_translate">Translate</string>
+    <string name="btn_save">Save</string>
+
+    <!--  labels  -->
+    <string name="hint_input_phrase">New Phrase</string>
+
+    <!--  error messages  -->
+    <string name="err_input_phrase">Please input phrase</string>
+    <string name="err_invalid_phrase">Please input valid phrase</string>
 </resources>
