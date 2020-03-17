@@ -10,15 +10,16 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.Objects;
-
 import edu.ravindu.cwk2.R;
+import edu.ravindu.cwk2.database.DatabaseManager;
 
 public class ActAddPhrases extends ActCommon implements View.OnClickListener {
 
     private TextInputLayout tilAddPhrase;
     private TextInputEditText etAddPhrase;
     private TextView btnSave;
+
+    private DatabaseManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
         hideKeyboard(findViewById(R.id.uiAddPhrases), this);
 
         initViews();
+        setupDbManager();
         setEventListeners();
     }
 
@@ -37,6 +39,10 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
         btnSave = findViewById(R.id.btnSave);
     }
 
+    private void setupDbManager() {
+        dbManager = new DatabaseManager(this);
+        dbManager.open();
+    }
 
     private void setEventListeners() {
         btnSave.setOnClickListener(this);
@@ -70,6 +76,8 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void saveToDatabase() {
+        String phrase = etAddPhrase.getText().toString().trim();
+        dbManager.insertRecord(phrase);
         Toast.makeText(this, "Saved to database", Toast.LENGTH_SHORT).show();
     }
 

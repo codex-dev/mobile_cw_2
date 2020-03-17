@@ -15,4 +15,6 @@
     <!--  error messages  -->
     <string name="err_input_phrase">Please input phrase</string>
     <string name="err_invalid_phrase">Please input valid phrase</string>
+
+    <string name="empty_list">Nothing to display</string>
 </resources>
