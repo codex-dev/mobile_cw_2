@@ -13,15 +13,6 @@
         android:paddingEnd="10dp"
         android:textSize="17sp"
         android:textColor="@color/black"
-        android:gravity="center_vertical"
-        android:layout_toStartOf="@id/cbPhrase" />
-
-    <CheckBox
-        android:id="@+id/cbPhrase"
-        android:layout_width="30dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="10dp"
-        android:visibility="gone"/>
+        android:gravity="center_vertical"/>
 
 </RelativeLayout>

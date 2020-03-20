@@ -12,6 +12,7 @@ import edu.ravindu.cwk2.database.DatabaseManager;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE;
 
 public class ActDisplayPhrases extends ActCommon {
+
     private DatabaseManager dbManager;
     private Cursor cursor;
     private ListView listPhrases;
@@ -42,7 +43,7 @@ public class ActDisplayPhrases extends ActCommon {
     }
 
     private void showList() {
-        adapter = new SimpleCursorAdapter(this, R.layout.list_item, cursor, arrFrom, arrTo, 0);
+        adapter = new SimpleCursorAdapter(this, R.layout.display_phrase_list_item, cursor, arrFrom, arrTo, 0);
         adapter.notifyDataSetChanged();
         listPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
         listPhrases.setAdapter(adapter);
