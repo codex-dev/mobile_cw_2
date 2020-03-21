@@ -39,10 +39,10 @@ public class ActDisplayPhrases extends ActCommon {
     private void setupDbManager() {
         dbManager = new DatabaseManager(this);
         dbManager.open();
-        cursor = dbManager.findRecords();
     }
 
     private void showList() {
+        cursor = dbManager.findRecords();
         adapter = new SimpleCursorAdapter(this, R.layout.display_phrase_list_item, cursor, arrFrom, arrTo, 0);
         adapter.notifyDataSetChanged();
         listPhrases.setEmptyView(findViewById(R.id.tvEmptyList));

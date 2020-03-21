@@ -78,6 +78,7 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
     private void saveToDatabase() {
         String phrase = etAddPhrase.getText().toString().trim();
         dbManager.insertRecord(phrase);
+        etAddPhrase.setText(null);
         Toast.makeText(this, "Saved to database", Toast.LENGTH_SHORT).show();
     }
 
