@@ -93,6 +93,14 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
         }*/
         return true;
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbManager != null)
+            dbManager.close();
+    }
 }
 
 /*

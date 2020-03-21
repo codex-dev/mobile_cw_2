@@ -48,4 +48,14 @@ public class ActDisplayPhrases extends ActCommon {
         listPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
         listPhrases.setAdapter(adapter);
     }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbManager != null)
+            dbManager.close();
+        if (cursor != null)
+            cursor.close();
+    }
 }
