@@ -1,10 +1,12 @@
-package edu.ravindu.cwk2.activity;
+package edu.ravindu.cwk2.ui.activity;
 
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.database.SQLException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -15,12 +17,13 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
-import edu.ravindu.cwk2.util.CustomCusorAdapter;
+import edu.ravindu.cwk2.ui.adapter.CustomCusorAdapter;
 
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE;
 
 public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
+    private static final String TAG = "ActEditPhrases";
     private TextView btnEdit, btnSave;
     private ListView listPhrases;
     private TextInputLayout tilEditPhrase;
@@ -112,7 +115,11 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private void setupDbManager() {
         dbManager = new DatabaseManager(this);
-        dbManager.open();
+        try {
+            dbManager.open();
+        } catch (SQLException e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     private void showList() {

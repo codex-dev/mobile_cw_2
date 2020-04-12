@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/uiEditPhrases"
-    tools:context=".activity.ActEditPhrases">
+    tools:context=".ui.activity.ActEditPhrases">
 
     <ScrollView
         android:id="@+id/scrollView"

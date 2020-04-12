@@ -1,6 +1,4 @@
-package edu.ravindu.cwk2.activity;
-
-import androidx.appcompat.app.AppCompatActivity;
+package edu.ravindu.cwk2.ui.activity;
 
 import android.os.Bundle;
 

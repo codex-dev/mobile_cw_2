@@ -21,8 +21,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PHRASE = "phrase";
 
     // create table query
-    private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + _ID
-            + " INTEGER PRIMARY KEY AUTOINCREMENT, " + PHRASE + " TEXT NOT NULL);";
+    private static final String CREATE_TABLE =
+            "CREATE TABLE " + TABLE_NAME + "("
+            + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + PHRASE + " TEXT NOT NULL" +
+            ");";
 
 
     public DatabaseHelper(@Nullable Context context) {

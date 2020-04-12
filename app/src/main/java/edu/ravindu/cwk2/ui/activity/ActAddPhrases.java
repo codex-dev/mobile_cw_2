@@ -1,8 +1,10 @@
-package edu.ravindu.cwk2.activity;
+package edu.ravindu.cwk2.ui.activity;
 
+import android.database.SQLException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ import edu.ravindu.cwk2.database.DatabaseManager;
 
 public class ActAddPhrases extends ActCommon implements View.OnClickListener {
 
+    private static final String TAG = "ActAddPhrases";
     private TextInputLayout tilAddPhrase;
     private TextInputEditText etAddPhrase;
     private TextView btnSave;
@@ -41,7 +44,11 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
 
     private void setupDbManager() {
         dbManager = new DatabaseManager(this);
-        dbManager.open();
+        try {
+            dbManager.open();
+        } catch (SQLException e) {
+            Log.e(TAG, e.toString());
+        }
     }
 
     private void setEventListeners() {
@@ -76,7 +83,7 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void saveToDatabase() {
-        String phrase = etAddPhrase.getText().toString().trim();
+        String phrase = getTrimmedText(etAddPhrase);
         dbManager.insertRecord(phrase);
         etAddPhrase.setText(null);
         Toast.makeText(this, "Saved to database", Toast.LENGTH_SHORT).show();
@@ -99,8 +106,9 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dbManager != null)
+        if (dbManager != null) {
             dbManager.close();
+        }
     }
 }
 

@@ -5,19 +5,19 @@ package edu.ravindu.cwk2.ibm_translator;
  */
 public class TranslatorCredentials {
 
-    private final String API_KEY = "HmLCLimeEArAMAgMh8_nQo0AmaGXbbUE59DSH8IHW9Zc";
-    private final String URL = "https://api.us-east.language-translator.watson.cloud.ibm.com/instances/0fa78682-37a2-41b1-aa5e-23a22c16e93b";
-    private final String VERSION = "2018-05-01";
+    private final static String API_KEY = "HmLCLimeEArAMAgMh8_nQo0AmaGXbbUE59DSH8IHW9Zc";
+    private final static String URL = "https://api.us-east.language-translator.watson.cloud.ibm.com/instances/0fa78682-37a2-41b1-aa5e-23a22c16e93b";
+    private final static String VERSION = "2018-05-01";
 
-    public String getApiKey() {
+    public static String getApiKey() {
         return API_KEY;
     }
 
-    public String getUrl() {
+    public static String getUrl() {
         return URL;
     }
 
-    public String getVersion() {
+    public static String getVersion() {
         return VERSION;
     }
 }

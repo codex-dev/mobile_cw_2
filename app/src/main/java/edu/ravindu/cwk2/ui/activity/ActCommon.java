@@ -1,4 +1,4 @@
-package edu.ravindu.cwk2.activity;
+package edu.ravindu.cwk2.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -93,6 +93,23 @@ public class ActCommon extends AppCompatActivity {
     protected boolean isEmptyText(EditText editText) {
         return editText.getText() == null || editText.getText().toString().trim().isEmpty();
     }
+
+    protected String getTrimmedText(EditText editText) {
+        return editText.getText().toString().trim();
+    }
+
+//    protected ArrayList<Phrase> getDataFromCursor(Cursor cursor) {
+//        ArrayList<Phrase> list = new ArrayList<>();
+//        if (cursor != null && cursor.getCount() > 0) {
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    String data = cursor.getString(cursor.getColumnIndex("data"));
+//                    // do what ever you want here
+//                } while (cursor.moveToNext());
+//            }
+//        }
+//        cursor.close();
+//    }
 
 }
 

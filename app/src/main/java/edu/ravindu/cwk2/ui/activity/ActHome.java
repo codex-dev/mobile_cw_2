@@ -1,4 +1,4 @@
-package edu.ravindu.cwk2.activity;
+package edu.ravindu.cwk2.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;

@@ -1,4 +1,4 @@
-package edu.ravindu.cwk2.util;
+package edu.ravindu.cwk2.ui.adapter;
 
 
 import android.content.Context;
