@@ -14,17 +14,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "CWK_2.DB";  // database information
     private static final int DB_VERSION = 1; // database version
 
-    public static final String TABLE_NAME = "PHRASES"; // table Name
-
-    // table columns
-    public static final String _ID = "_id";
-    public static final String PHRASE = "phrase";
+    public static final String TABLE_NAME = "PHRASES";
+    public static final String PHRASE_ID = "phraseId";
+    public static final String PHRASE_TEXT = "phraseText";
 
     // create table query
     private static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
-            + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + PHRASE + " TEXT NOT NULL" +
+            + PHRASE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + PHRASE_TEXT + " TEXT NOT NULL" +
             ");";
 
 

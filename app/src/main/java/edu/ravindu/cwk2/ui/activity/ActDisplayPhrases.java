@@ -16,8 +16,8 @@ import edu.ravindu.cwk2.model.Phrase;
 import edu.ravindu.cwk2.ui.adapter.DisplayListAdapter;
 import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
-import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE;
-import static edu.ravindu.cwk2.database.DatabaseHelper._ID;
+import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
+import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
 
 public class ActDisplayPhrases extends ActCommon {
 
@@ -71,8 +71,8 @@ public class ActDisplayPhrases extends ActCommon {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext()) {
                     Phrase p = new Phrase();
-                    p.setId(cursor.getInt(cursor.getColumnIndex(_ID)));
-                    p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE)));
+                    p.setId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
+                    p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE_TEXT)));
                     listPhrases.add(p);
                 }
             }
