@@ -177,7 +177,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void saveModifiedPhrase() {
-        int result = dbManager.updatePhrase(selectedPhrase.getId(), selectedPhrase.getPhrase());
+        int result = dbManager.updatePhrase(selectedPhrase.getId(), getTrimmedText(etEditPhrase));
 
         if (result == 1) {
             Toast.makeText(ActEditPhrases.this, "Phrase updated", Toast.LENGTH_SHORT).show();
