@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,8 @@ public class EditListAdapter extends ArrayAdapter {
         this.layoutResource = resource;
         this.listAllPhrases = objects;
         this.clickListener = listener;
+
+        Toast.makeText(context, "List loaded", Toast.LENGTH_SHORT).show();
     }
 
     @NonNull

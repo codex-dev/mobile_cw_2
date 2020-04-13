@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.apache.commons.lang3.ObjectUtils;
+
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
-import static edu.ravindu.cwk2.database.DatabaseHelper.TABLE_NAME;
+import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TABLE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
 
 /**
@@ -32,15 +34,15 @@ public class DatabaseManager {
         dbHelper.close();
     }
 
-    public void insertRecord(String phrase) {
+    public void insertPhrase(String phrase) throws NullPointerException {
         ContentValues contentValue = new ContentValues();
         contentValue.put(PHRASE_TEXT, phrase);
-        database.insert(TABLE_NAME, null, contentValue);
+        database.insert(PHRASE_TABLE, null, contentValue);
     }
 
-    public Cursor findRecords() {
+    public Cursor findPhrases() throws NullPointerException{
         String[] columns = new String[]{PHRASE_ID, PHRASE_TEXT};
-        Cursor cursor = database.query(TABLE_NAME, columns, null,
+        Cursor cursor = database.query(PHRASE_TABLE, columns, null,
                 null, null, null, PHRASE_TEXT); // order by phrase alphabetically
         if (cursor != null) {
             cursor.moveToFirst();
@@ -48,16 +50,15 @@ public class DatabaseManager {
         return cursor;
     }
 
-    public int updateRecord(int id, String phrase) {
+    public int updatePhrase(int id, String phrase) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(PHRASE_TEXT, phrase);
-        int updatedRowCount = database.update(TABLE_NAME, contentValues,
-                PHRASE_ID + " = ?" , new String[] {String.valueOf(id)} );
+        int updatedRowCount = database.update(PHRASE_TABLE, contentValues, PHRASE_ID + " = ?" , new String[] {String.valueOf(id)} );
         return updatedRowCount;
     }
 
-    public void deleteRecord(int id) {
-        database.delete(TABLE_NAME, PHRASE_ID + "=" + id,
+    public void deletePhrase(int id) {
+        database.delete(PHRASE_TABLE, PHRASE_ID + "=" + id,
                 null);
     }
 }

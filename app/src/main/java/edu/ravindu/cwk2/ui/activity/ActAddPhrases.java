@@ -84,9 +84,14 @@ public class ActAddPhrases extends ActCommon implements View.OnClickListener {
 
     private void saveToDatabase() {
         String phrase = getTrimmedText(etAddPhrase);
-        dbManager.insertRecord(phrase);
-        etAddPhrase.setText(null);
-        Toast.makeText(this, "Saved to database", Toast.LENGTH_SHORT).show();
+        try {
+            dbManager.insertPhrase(phrase);
+            etAddPhrase.setText(null);
+            Toast.makeText(this, "Saved to database", Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.toString());
+            Toast.makeText(this,"Saving failed!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean isValidText() {

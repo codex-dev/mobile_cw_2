@@ -22,14 +22,14 @@ import edu.ravindu.cwk2.model.Phrase;
 import edu.ravindu.cwk2.ui.adapter.EditListAdapter;
 import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
-import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
+import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
 
 public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private static final String TAG = "ActEditPhrases";
     private TextView btnEdit, btnSave;
-//    private TextInputLayout tilEditPhrase;
+    //    private TextInputLayout tilEditPhrase;
     private TextInputEditText etEditPhrase;
     private ListView lvPhrases;
     private ArrayAdapter adapter;
@@ -125,18 +125,26 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private void getPhrasesFromDb() {
         listPhrases = new ArrayList<>();
-        cursor = dbManager.findRecords();
         try {
+            cursor = dbManager.findPhrases();
+
             if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
+                for(int i=0; i<cursor.getCount(); i++){
+                    cursor.moveToPosition(i);
                     Phrase p = new Phrase();
                     p.setId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
                     p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE_TEXT)));
                     listPhrases.add(p);
                 }
             }
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.toString());
         } finally {
-            cursor.close();
+            try {
+                cursor.close();
+            } catch (NullPointerException e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
@@ -169,7 +177,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void saveModifiedPhrase() {
-        int result = dbManager.updateRecord(selectedPhrase.getId(), selectedPhrase.getPhrase());
+        int result = dbManager.updatePhrase(selectedPhrase.getId(), selectedPhrase.getPhrase());
 
         if (result == 1) {
             Toast.makeText(ActEditPhrases.this, "Phrase updated", Toast.LENGTH_SHORT).show();

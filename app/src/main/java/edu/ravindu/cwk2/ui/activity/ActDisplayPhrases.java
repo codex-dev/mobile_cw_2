@@ -66,18 +66,24 @@ public class ActDisplayPhrases extends ActCommon {
 
     private void getPhrasesFromDb() {
         listPhrases = new ArrayList<>();
-        cursor = dbManager.findRecords();
-        try {
+        try{cursor = dbManager.findPhrases();
             if (cursor.getCount() > 0) {
-                while (cursor.moveToNext()) {
+                for(int i=0; i<cursor.getCount(); i++){
+                    cursor.moveToPosition(i);
                     Phrase p = new Phrase();
                     p.setId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
                     p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE_TEXT)));
                     listPhrases.add(p);
                 }
             }
+        } catch (NullPointerException e) {
+            Log.e(TAG, e.toString());
         } finally {
-            cursor.close();
+            try {
+                cursor.close();
+            } catch (NullPointerException e) {
+                Log.e(TAG, e.toString());
+            }
         }
     }
 
