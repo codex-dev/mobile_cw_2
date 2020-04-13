@@ -19,14 +19,14 @@ import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 /**
  * Created by Ravindu Fernando on 2020-04-13 at 12:17 AM
  */
-public class CustomArrayAdapter extends ArrayAdapter {
+public class DisplayListAdapter extends ArrayAdapter {
 
     private Context context;
     private int layoutResource;
     private List<Phrase> listAllPhrases;
     private ClickListener clickListener;
 
-    public CustomArrayAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, ClickListener listener) {
+    public DisplayListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, ClickListener listener) {
         super(context, resource, objects);
         this.context = context;
         this.layoutResource = resource;
@@ -43,14 +43,14 @@ public class CustomArrayAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(context).inflate(layoutResource, parent, false);
         }
 
-        final String text = listAllPhrases.get(position).getPhrase();
+        final Phrase p = listAllPhrases.get(position);
 
         viewHolder.tvPhrase = convertView.findViewById(R.id.tvPhrase);
-        viewHolder.tvPhrase.setText(text);
+        viewHolder.tvPhrase.setText(p.getPhrase());
         viewHolder.tvPhrase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.onListItemClickListener(text);
+                clickListener.onListItemClickListener(p);
             }
         });
 

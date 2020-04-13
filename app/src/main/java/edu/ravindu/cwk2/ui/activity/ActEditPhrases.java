@@ -1,13 +1,13 @@
 package edu.ravindu.cwk2.ui.activity;
 
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.SQLException;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,41 +15,29 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.ArrayList;
+
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
-import edu.ravindu.cwk2.ui.adapter.CustomCusorAdapter;
+import edu.ravindu.cwk2.model.Phrase;
+import edu.ravindu.cwk2.ui.adapter.EditListAdapter;
+import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE;
+import static edu.ravindu.cwk2.database.DatabaseHelper._ID;
 
 public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private static final String TAG = "ActEditPhrases";
     private TextView btnEdit, btnSave;
-    private ListView listPhrases;
-    private TextInputLayout tilEditPhrase;
+//    private TextInputLayout tilEditPhrase;
     private TextInputEditText etEditPhrase;
-
-    final String[] arrFrom = new String[]{"phrase", PHRASE};
-    final int[] arrTo = new int[]{R.id.tvPhrase};
-    private String selectedPhrase;
-    private int selectedPhraseId;
-
+    private ListView lvPhrases;
+    private ArrayAdapter adapter;
+    private ArrayList<Phrase> listPhrases;
     private DatabaseManager dbManager;
     private Cursor cursor;
-    private CustomCusorAdapter adapter;
-    private DataSetObserver observer = new DataSetObserver() {
-        @Override
-        public void onChanged() {
-            if (adapter != null) {
-                selectedPhraseId = adapter.getSelectedPosition();
-                selectedPhrase = adapter.getSelectedPhrase();
-
-                btnEdit.setEnabled(true);
-                btnEdit.setBackground(getDrawable(R.drawable.btn_selector));
-//            Toast.makeText(ActEditPhrases.this, "Selected " + selection, Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+    private Phrase selectedPhrase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +53,16 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void initViews() {
-        listPhrases = findViewById(R.id.listPhrases);
+        lvPhrases = findViewById(R.id.lvPhrases);
         btnEdit = findViewById(R.id.btnEdit);
         btnSave = findViewById(R.id.btnSave);
-        tilEditPhrase = findViewById(R.id.tilEditPhrase);
+//        tilEditPhrase = findViewById(R.id.tilEditPhrase);
         etEditPhrase = findViewById(R.id.etEditPhrase);
 
         setInitialState();
     }
 
     private void setInitialState() {
-        // set initial state for views
         etEditPhrase.setText(null);
         etEditPhrase.setEnabled(false);
         btnEdit.setEnabled(false);
@@ -104,7 +91,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
                 if (isEmptyText(etEditPhrase)) { // disable save button if text field is empty
                     btnSave.setEnabled(false);
                     btnSave.setBackground(getDrawable(R.drawable.bg_btn_disabled));
-                } else if (etEditPhrase.getText() != null) {
+                } else {
                     etEditPhrase.setSelection(etEditPhrase.getText().length());
                     btnSave.setEnabled(true);
                     btnSave.setBackground(getDrawable(R.drawable.btn_selector));
@@ -123,12 +110,35 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void showList() {
-        cursor = dbManager.findRecords();
-        adapter = new CustomCusorAdapter(this, R.layout.edit_phrase_list_item, cursor, arrFrom, arrTo, 0);
-        adapter.registerDataSetObserver(observer);
+        getPhrasesFromDb();
+        adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new ClickListener() {
+            @Override
+            public void onListItemClickListener(Phrase phrase) {
+                selectedPhrase = phrase;
+                btnEdit.setEnabled(true);
+                btnEdit.setBackground(getDrawable(R.drawable.btn_selector));
+            }
+        });
 
-        listPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
-        listPhrases.setAdapter(adapter);
+        lvPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
+        lvPhrases.setAdapter(adapter);
+    }
+
+    private void getPhrasesFromDb() {
+        listPhrases = new ArrayList<>();
+        cursor = dbManager.findRecords();
+        try {
+            if (cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
+                    Phrase p = new Phrase();
+                    p.setId(cursor.getInt(cursor.getColumnIndex(_ID)));
+                    p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE)));
+                    listPhrases.add(p);
+                }
+            }
+        } finally {
+            cursor.close();
+        }
     }
 
     @Override
@@ -138,8 +148,6 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
             dbManager.close();
         if (cursor != null)
             cursor.close();
-        if (adapter != null)
-            adapter.unregisterDataSetObserver(observer);
     }
 
     @Override
@@ -158,23 +166,17 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
         if (!etEditPhrase.isEnabled()) {
             etEditPhrase.setEnabled(true);
         }
-        etEditPhrase.setText(selectedPhrase);
-
-        Toast.makeText(ActEditPhrases.this, "Edit Button Clicked", Toast.LENGTH_SHORT).show();
+        etEditPhrase.setText(selectedPhrase.getPhrase());
     }
 
     private void saveModifiedPhrase() {
-        Toast.makeText(ActEditPhrases.this, "Save Button Clicked", Toast.LENGTH_SHORT).show();
+        int result = dbManager.updateRecord(selectedPhrase.getId(), selectedPhrase.getPhrase());
 
-//      update text
-
-
-        if (cursor != null)
-            cursor.close();
-        if (adapter != null)
-            adapter.unregisterDataSetObserver(observer);
-        setInitialState(); // reset to initial state
-        showList(); // refresh list
+        if (result == 1) {
+            Toast.makeText(ActEditPhrases.this, "Phrase updated", Toast.LENGTH_SHORT).show();
+            setInitialState(); // reset to initial state
+            showList(); // refresh list
+        }
     }
 }
 

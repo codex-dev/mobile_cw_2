@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
 import edu.ravindu.cwk2.model.Phrase;
-import edu.ravindu.cwk2.ui.adapter.CustomArrayAdapter;
+import edu.ravindu.cwk2.ui.adapter.DisplayListAdapter;
 import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE;
@@ -54,10 +54,10 @@ public class ActDisplayPhrases extends ActCommon {
 
     private void showList() {
         getPhrasesFromDb();
-        adapter = new CustomArrayAdapter(this, R.layout.display_phrase_list_item, listPhrases, new ClickListener() {
+        adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases, new ClickListener() {
             @Override
-            public void onListItemClickListener(String phrase) {
-                Toast.makeText(ActDisplayPhrases.this, phrase, Toast.LENGTH_SHORT).show();
+            public void onListItemClickListener(Phrase phrase) {
+                Toast.makeText(ActDisplayPhrases.this, phrase.getPhrase(), Toast.LENGTH_SHORT).show();
             }
         });
         lvPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
@@ -85,9 +85,11 @@ public class ActDisplayPhrases extends ActCommon {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dbManager != null)
+        if (dbManager != null) {
             dbManager.close();
-        if (cursor != null)
+        }
+        if (cursor != null) {
             cursor.close();
+        }
     }
 }

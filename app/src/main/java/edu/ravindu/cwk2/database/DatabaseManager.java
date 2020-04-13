@@ -48,15 +48,16 @@ public class DatabaseManager {
         return cursor;
     }
 
-    public int updateRecord(long _id, String phrase) {
+    public int updateRecord(int id, String phrase) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(PHRASE, phrase);
-        return database.update(TABLE_NAME, contentValues,
-                _ID + " = " + _id, null);
+        int updatedRowCount = database.update(TABLE_NAME, contentValues,
+                _ID + " = ?" , new String[] {String.valueOf(id)} );
+        return updatedRowCount;
     }
 
-    public void deleteRecord(long _id) {
-        database.delete(TABLE_NAME, _ID + "=" + _id,
+    public void deleteRecord(int id) {
+        database.delete(TABLE_NAME, _ID + "=" + id,
                 null);
     }
 }
