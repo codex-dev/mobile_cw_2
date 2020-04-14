@@ -2,7 +2,7 @@
     <string name="app_name">Mobile Coursework 2</string>
 
     <!--  IBM cloud credentials  -->
-    <string name="ibm_sdk_version">"2018-05-01</string>
+    <string name="version_date">2018-05-01</string>
     <string name="language_translator_apikey">HmLCLimeEArAMAgMh8_nQo0AmaGXbbUE59DSH8IHW9Zc</string>
     <string name="language_translator_url">https://api.us-east.language-translator.watson.cloud.ibm.com/instances/0fa78682-37a2-41b1-aa5e-23a22c16e93b</string>
     <string name="text_speech_apikey">MtEjZFhhQBYD15LX9qF9-xVKRAkmQztmZday7EEKixzK</string>
@@ -16,6 +16,7 @@
     <string name="btn_translate">Translate</string>
     <string name="btn_save">Save</string>
     <string name="btn_edit">Edit</string>
+    <string name="btn_update">Update</string>
 
     <!--  labels  -->
     <string name="hint_input_phrase">New Phrase</string>

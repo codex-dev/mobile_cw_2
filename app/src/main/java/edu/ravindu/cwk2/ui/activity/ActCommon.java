@@ -97,20 +97,6 @@ public class ActCommon extends AppCompatActivity {
     protected String getTrimmedText(EditText editText) {
         return editText.getText().toString().trim();
     }
-
-//    protected ArrayList<Phrase> getDataFromCursor(Cursor cursor) {
-//        ArrayList<Phrase> list = new ArrayList<>();
-//        if (cursor != null && cursor.getCount() > 0) {
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    String data = cursor.getString(cursor.getColumnIndex("data"));
-//                    // do what ever you want here
-//                } while (cursor.moveToNext());
-//            }
-//        }
-//        cursor.close();
-//    }
-
 }
 
 

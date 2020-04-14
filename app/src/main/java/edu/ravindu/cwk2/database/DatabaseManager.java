@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_CODE;
+import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_ID;
+import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_NAME;
+import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_TABLE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TABLE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
@@ -58,6 +62,23 @@ public class DatabaseManager {
     public void deletePhrase(int id) {
 //        database.delete(PHRASE_TABLE, PHRASE_ID + "=" + id, null);
         database.delete(PHRASE_TABLE, PHRASE_ID + "=?" , new String[]{String.valueOf(id)});
+    }
+
+    public void insertLanguage(String langCode, String langName) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(LANG_CODE, langCode);
+        contentValue.put(LANG_NAME, langName);
+        database.insert(LANG_TABLE, null, contentValue);
+    }
+
+    public Cursor findLanguages() throws NullPointerException {
+        String[] columns = new String[]{LANG_ID,LANG_CODE,LANG_NAME};
+        Cursor cursor = database.query(LANG_TABLE, columns, null, null,
+                null, null, LANG_NAME); // order by phrase alphabetically
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
     }
 }
 

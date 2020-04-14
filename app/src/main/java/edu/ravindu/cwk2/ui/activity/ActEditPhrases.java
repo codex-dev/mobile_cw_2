@@ -112,8 +112,8 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
         getPhrasesFromDb();
         adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new ClickListener() {
             @Override
-            public void onListItemClickListener(Phrase phrase) {
-                selectedPhrase = phrase;
+            public void onListItemClickListener(int position, String text) {
+                selectedPhrase = listPhrases.get(position);
                 btnEdit.setEnabled(true);
                 btnEdit.setBackground(getDrawable(R.drawable.btn_selector));
             }
@@ -132,7 +132,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
                 for(int i=0; i<cursor.getCount(); i++){
                     cursor.moveToPosition(i);
                     Phrase p = new Phrase();
-                    p.setId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
+                    p.setPhraseId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
                     p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE_TEXT)));
                     listPhrases.add(p);
                 }
@@ -177,7 +177,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     }
 
     private void saveModifiedPhrase() {
-        int result = dbManager.updatePhrase(selectedPhrase.getId(), getTrimmedText(etEditPhrase));
+        int result = dbManager.updatePhrase(selectedPhrase.getPhraseId(), getTrimmedText(etEditPhrase));
 
         if (result == 1) {
             Toast.makeText(ActEditPhrases.this, "Phrase updated", Toast.LENGTH_SHORT).show();

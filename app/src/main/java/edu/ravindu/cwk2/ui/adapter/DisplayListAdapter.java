@@ -36,7 +36,7 @@ public class DisplayListAdapter extends ArrayAdapter {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder viewHolder = new ViewHolder();
 
         if (convertView == null) {
@@ -50,7 +50,7 @@ public class DisplayListAdapter extends ArrayAdapter {
         viewHolder.tvPhrase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.onListItemClickListener(p);
+                clickListener.onListItemClickListener(position, p.getPhrase());
             }
         });
 

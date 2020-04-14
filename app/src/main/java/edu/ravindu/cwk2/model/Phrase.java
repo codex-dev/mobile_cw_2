@@ -7,11 +7,11 @@ public class Phrase {
     private int id;
     private String phrase;
 
-    public int getId() {
+    public int getPhraseId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setPhraseId(int id) {
         this.id = id;
     }
 

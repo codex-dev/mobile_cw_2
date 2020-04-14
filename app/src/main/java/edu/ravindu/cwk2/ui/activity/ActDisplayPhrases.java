@@ -56,8 +56,8 @@ public class ActDisplayPhrases extends ActCommon {
         getPhrasesFromDb();
         adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases, new ClickListener() {
             @Override
-            public void onListItemClickListener(Phrase phrase) {
-                Toast.makeText(ActDisplayPhrases.this, phrase.getPhrase(), Toast.LENGTH_SHORT).show();
+            public void onListItemClickListener(int position, String text) {
+                Toast.makeText(ActDisplayPhrases.this, listPhrases.get(position).getPhrase(), Toast.LENGTH_SHORT).show();
             }
         });
         lvPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
@@ -71,7 +71,7 @@ public class ActDisplayPhrases extends ActCommon {
                 for(int i=0; i<cursor.getCount(); i++){
                     cursor.moveToPosition(i);
                     Phrase p = new Phrase();
-                    p.setId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
+                    p.setPhraseId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));
                     p.setPhrase(cursor.getString(cursor.getColumnIndex(PHRASE_TEXT)));
                     listPhrases.add(p);
                 }

@@ -5,11 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,28 +15,26 @@ import androidx.annotation.Nullable;
 import java.util.List;
 
 import edu.ravindu.cwk2.R;
-import edu.ravindu.cwk2.model.Phrase;
+import edu.ravindu.cwk2.model.Language;
 import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
 /**
- * Created by Ravindu Fernando on 2020-04-13 at 08:37 AM
+ * Created by Ravindu Fernando on 2020-04-13 at 10:25 PM
  */
-public class EditListAdapter extends ArrayAdapter {
+public class LanguageListAdapter extends ArrayAdapter {
 
     private Context context;
     private int layoutResource;
-    private List<Phrase> listAllPhrases;
+    private List<Language> listAllLanguages;
     private ClickListener clickListener;
     private int selectedPosition = -1;
 
-    public EditListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, ClickListener listener) {
+    public LanguageListAdapter(@NonNull Context context, int resource, @NonNull List<Language> objects, ClickListener listener) {
         super(context, resource, objects);
         this.context = context;
         this.layoutResource = resource;
-        this.listAllPhrases = objects;
+        this.listAllLanguages = objects;
         this.clickListener = listener;
-
-        Toast.makeText(context, "List loaded", Toast.LENGTH_SHORT).show();
     }
 
     @NonNull
@@ -50,18 +46,18 @@ public class EditListAdapter extends ArrayAdapter {
             convertView = LayoutInflater.from(context).inflate(layoutResource, parent, false);
         }
 
-        final Phrase p = listAllPhrases.get(position);
+        final Language lang = listAllLanguages.get(position);
 
-        viewHolder.tvPhrase = convertView.findViewById(R.id.tvPhrase);
-        viewHolder.rbPhrase = convertView.findViewById(R.id.rbPhrase);
+        viewHolder.tvLang = convertView.findViewById(R.id.tvLang);
+        viewHolder.cbLang = convertView.findViewById(R.id.cbLang);
 
-        viewHolder.tvPhrase.setText(p.getPhrase());
-        viewHolder.rbPhrase.setChecked(selectedPosition == position);
-        viewHolder.rbPhrase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        viewHolder.tvLang.setText(lang.getLanguageName());
+        viewHolder.cbLang.setChecked(selectedPosition == position);
+        viewHolder.cbLang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 selectedPosition = position;
-                clickListener.onListItemClickListener(position, p.getPhrase());
+                clickListener.onListItemClickListener(position, lang.getLanguageName());
                 notifyDataSetChanged();
             }
         });
@@ -70,7 +66,7 @@ public class EditListAdapter extends ArrayAdapter {
     }
 
     private class ViewHolder {
-        TextView tvPhrase;
-        RadioButton rbPhrase;
+        TextView tvLang;
+        CheckBox cbLang;
     }
 }
