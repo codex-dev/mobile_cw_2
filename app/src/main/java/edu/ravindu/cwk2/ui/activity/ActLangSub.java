@@ -76,6 +76,7 @@ public class ActLangSub extends ActCommon {
         });
         lvLanguages.setEmptyView(findViewById(R.id.tvEmptyList));
         lvLanguages.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void getLanguagesFromDb() {
@@ -123,6 +124,7 @@ public class ActLangSub extends ActCommon {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.i(TAG, "/// Load languages : pre execute");
             Toast.makeText(ActLangSub.this, "Retrieval started.", Toast.LENGTH_SHORT).show();
         }
 
@@ -133,6 +135,7 @@ public class ActLangSub extends ActCommon {
 
         @Override
         protected String doInBackground(Void... params) {
+            Log.i(TAG, "/// Load languages : do in background");
             IdentifiableLanguages languages = translationService.listIdentifiableLanguages().execute().getResult();
             listIdentifiableLanguages = languages.getLanguages();
             return "Retrieval completed.";
@@ -141,13 +144,15 @@ public class ActLangSub extends ActCommon {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            Log.i(TAG, "/// Load languages : post execute");
             Toast.makeText(ActLangSub.this, s, Toast.LENGTH_SHORT).show();
 
             for (IdentifiableLanguage language : listIdentifiableLanguages) {
-                dbManager.insertLanguage(language.getLanguage(), language.getName());
+                dbManager.insertLanguage(language.getLanguage(), language.getName(), "N");
             }
 
-            showList();
+            getLanguagesFromDb();
         }
     }
 

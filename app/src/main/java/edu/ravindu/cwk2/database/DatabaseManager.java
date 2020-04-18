@@ -13,6 +13,7 @@ import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_TABLE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TABLE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
+import static edu.ravindu.cwk2.database.DatabaseHelper.SUB_STATUS;
 
 /**
  * Created by Ravindu Fernando on 2020-03-17 at 10:46 PM
@@ -64,10 +65,11 @@ public class DatabaseManager {
         database.delete(PHRASE_TABLE, PHRASE_ID + "=?" , new String[]{String.valueOf(id)});
     }
 
-    public void insertLanguage(String langCode, String langName) {
+    public void insertLanguage(String langCode, String langName, String subStatus) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(LANG_CODE, langCode);
         contentValue.put(LANG_NAME, langName);
+        contentValue.put(SUB_STATUS, subStatus);
         database.insert(LANG_TABLE, null, contentValue);
     }
 
