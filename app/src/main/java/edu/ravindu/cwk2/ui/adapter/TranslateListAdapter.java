@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,22 +17,21 @@ import edu.ravindu.cwk2.model.Phrase;
 import edu.ravindu.cwk2.ui.event_listener.PhraseListListener;
 
 /**
- * Created by Ravindu Fernando on 2020-04-13 at 08:37 AM
+ * Created by Ravindu Fernando on 2020-04-20 at 07:46 AM
  */
-public class EditListAdapter extends ArrayAdapter {
-
+public class TranslateListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResource;
     private List<Phrase> listAllPhrases;
-    private PhraseListListener phraseListListener;
+    private PhraseListListener listener;
     private int selectedPosition = -1;
 
-    public EditListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, PhraseListListener listener) {
+    public TranslateListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, PhraseListListener listener) {
         super(context, resource, objects);
         this.context = context;
         this.layoutResource = resource;
         this.listAllPhrases = objects;
-        this.phraseListListener = listener;
+        this.listener = listener;
     }
 
     @NonNull
@@ -50,15 +46,18 @@ public class EditListAdapter extends ArrayAdapter {
         final Phrase p = listAllPhrases.get(position);
 
         viewHolder.tvPhrase = convertView.findViewById(R.id.tvPhrase);
-        viewHolder.rbPhrase = convertView.findViewById(R.id.rbPhrase);
-
         viewHolder.tvPhrase.setText(p.getPhrase());
-        viewHolder.rbPhrase.setChecked(selectedPosition == position);
-        viewHolder.rbPhrase.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if(selectedPosition == position){
+           viewHolder.tvPhrase.setBackground(context.getDrawable(R.drawable.bg_list_item_selected));
+        } else {
+            viewHolder.tvPhrase.setBackground(context.getDrawable(R.drawable.bg_list_item_normal));
+        }
+
+        viewHolder.tvPhrase.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onClick(View view) {
                 selectedPosition = position;
-                phraseListListener.onPhraseItemClick(position, p.getPhrase());
+                listener.onPhraseItemClick(position, p.getPhrase());
                 notifyDataSetChanged();
             }
         });
@@ -68,6 +67,5 @@ public class EditListAdapter extends ArrayAdapter {
 
     private class ViewHolder {
         TextView tvPhrase;
-        RadioButton rbPhrase;
     }
 }

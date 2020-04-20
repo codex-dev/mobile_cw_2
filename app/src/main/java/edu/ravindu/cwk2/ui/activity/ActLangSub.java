@@ -40,7 +40,6 @@ public class ActLangSub extends ActCommon {
     private DatabaseManager dbManager;
     private Cursor cursor;
     private ListView lvLanguages;
-    private ArrayAdapter adapter;
     private ArrayList<Language> listLanguages;
     private HashMap<Integer, Boolean> mapSubModifiedLangs;
 
@@ -88,7 +87,7 @@ public class ActLangSub extends ActCommon {
 
     private void getLanguagesFromDb() {
         try {
-            cursor = dbManager.findLanguage();
+            cursor = dbManager.findAllLanguages();
             if (cursor.getCount() > 0) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
@@ -115,7 +114,7 @@ public class ActLangSub extends ActCommon {
     }
 
     private void showList() {
-        adapter = new LanguageListAdapter(this, R.layout.sub_lang_list_item, listLanguages, new LangListListener() {
+        ArrayAdapter adapter = new LanguageListAdapter(this, R.layout.sub_lang_list_item, listLanguages, new LangListListener() {
             @Override
             public void onItemCheckedChanged(int id, boolean isChecked) {
                 mapSubModifiedLangs.put(id, isChecked);
@@ -154,14 +153,14 @@ public class ActLangSub extends ActCommon {
 
         @Override
         protected void onPreExecute() {
-            Toast.makeText(ActLangSub.this, "Retrieval started.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActLangSub.this, "Retrieving Languages...", Toast.LENGTH_SHORT).show();
         }
 
         @Override
         protected String doInBackground(Void... params) {
             IdentifiableLanguages languages = translationService.listIdentifiableLanguages().execute().getResult();
             listIdentifiableLanguages = languages.getLanguages();
-            return "Retrieval completed.";
+            return "Languages Retrieved";
         }
 
         @Override

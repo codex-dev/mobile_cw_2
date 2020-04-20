@@ -23,7 +23,6 @@ public class ActDisplayPhrases extends ActCommon {
     private DatabaseManager dbManager;
     private Cursor cursor;
     private ListView lvPhrases;
-    private ArrayAdapter adapter;
     private ArrayList<Phrase> listPhrases;
 
     @Override
@@ -52,7 +51,7 @@ public class ActDisplayPhrases extends ActCommon {
 
     private void showList() {
         getPhrasesFromDb();
-        adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases);
+        ArrayAdapter adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases);
         lvPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
         lvPhrases.setAdapter(adapter);
     }
@@ -60,7 +59,7 @@ public class ActDisplayPhrases extends ActCommon {
     private void getPhrasesFromDb() {
         listPhrases = new ArrayList<>();
         try {
-            cursor = dbManager.findPhrases();
+            cursor = dbManager.findAllPhrases();
             if (cursor.getCount() > 0) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);

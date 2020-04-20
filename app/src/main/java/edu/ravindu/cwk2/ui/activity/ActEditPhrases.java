@@ -32,7 +32,6 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     //    private TextInputLayout tilEditPhrase;
     private TextInputEditText etEditPhrase;
     private ListView lvPhrases;
-    private ArrayAdapter adapter;
     private ArrayList<Phrase> listPhrases;
     private DatabaseManager dbManager;
     private Cursor cursor;
@@ -110,7 +109,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private void showList() {
         getPhrasesFromDb();
-        adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new PhraseListListener() {
+        ArrayAdapter adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new PhraseListListener() {
             @Override
             public void onPhraseItemClick(int position, String text) {
                 selectedPhrase = listPhrases.get(position);
@@ -126,7 +125,7 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
     private void getPhrasesFromDb() {
         listPhrases = new ArrayList<>();
         try {
-            cursor = dbManager.findPhrases();
+            cursor = dbManager.findAllPhrases();
 
             if (cursor.getCount() > 0) {
                 for(int i=0; i<cursor.getCount(); i++){

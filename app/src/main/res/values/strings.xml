@@ -21,6 +21,11 @@
     <!--  labels  -->
     <string name="hint_input_phrase">New Phrase</string>
     <string name="hint_edit_phrase">Modified Phrase</string>
+    <string name="hint_select_lang">Select Language</string>
+
+    <!--  switch  -->
+    <string name="translate_single_phrase">Translate Single Phrase</string>
+    <string name="translate_all_phrases">Translate All Phrases</string>
 
     <!--  error messages  -->
     <string name="err_input_phrase">Please input phrase</string>

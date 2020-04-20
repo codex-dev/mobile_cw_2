@@ -4,39 +4,49 @@
     android:id="@+id/uiEditPhrases"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
     tools:context=".ui.activity.ActTranslate">
 
     <LinearLayout
+        android:id="@+id/lytTopPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/scrollView"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
         android:orientation="vertical">
 
         <Switch
+            android:id="@+id/switchSelection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Translate Single Phrase"
+            android:textSize="15sp"
+            android:text="@string/translate_single_phrase"
             android:textColor="@color/black" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="40dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Language"
-                android:textColor="@color/black"/>
+                android:layout_centerVertical="true"
+                android:textSize="15sp"
+                android:layout_toStartOf="@id/spnSubLang"
+                android:text="@string/hint_select_lang"
+                android:textColor="@color/black" />
 
             <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/spnSubLang"
+                android:layout_width="200dp"
+                android:background="@drawable/bg_outline_grey"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -45,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/lytBottomPanel"
+        android:layout_below="@id/lytTopPanel"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:scrollbars="vertical">
@@ -78,32 +89,47 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/btnTranslate"
                 style="@style/ButtonStyle"
                 android:layout_width="300dp"
                 android:layout_height="45dp"
                 android:layout_marginEnd="7.5dp"
-                android:text="Translate" />
+                android:layout_marginBottom="0dp"
+                android:text="@string/btn_translate" />
 
             <ImageView
+                android:id="@+id/btnT2Speech"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="7.5dp"
+                android:layout_marginBottom="0dp"
                 android:background="@drawable/btn_selector"
                 android:padding="7dp"
                 android:src="@drawable/ico_pronounce"
                 android:tint="@color/white" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTranslation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="[translated_text]"
+            android:textColor="@color/green"
+            android:textSize="17sp" />
     </LinearLayout>
 
 </RelativeLayout>

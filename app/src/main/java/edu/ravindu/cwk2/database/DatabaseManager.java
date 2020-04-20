@@ -43,7 +43,7 @@ public class DatabaseManager {
         database.insert(PHRASE_TABLE, null, contentValue);
     }
 
-    public Cursor findPhrases() throws NullPointerException {
+    public Cursor findAllPhrases() throws NullPointerException {
         String[] columns = new String[]{PHRASE_ID, PHRASE_TEXT};
         Cursor cursor = database.query(PHRASE_TABLE, columns, null, null,
                 null, null, PHRASE_TEXT); // order by phrase alphabetically
@@ -73,7 +73,7 @@ public class DatabaseManager {
         database.insert(LANG_TABLE, null, contentValue);
     }
 
-    public Cursor findLanguage() throws NullPointerException {
+    public Cursor findAllLanguages() throws NullPointerException {
         String[] columns = new String[]{LANG_ID, LANG_CODE, LANG_NAME, SUB_STATUS};
         Cursor cursor = database.query(LANG_TABLE, columns, null, null,
                 null, null, LANG_NAME); // order by phrase alphabetically
@@ -88,6 +88,16 @@ public class DatabaseManager {
         values.put(SUB_STATUS, subStatus);
         int updatedRowCount = database.update(LANG_TABLE, values, LANG_ID + " = ?", new String[]{String.valueOf(id)});
         return updatedRowCount;
+    }
+
+    public Cursor findSubscribedLanguages() throws NullPointerException {
+        String[] columns = new String[]{LANG_ID, LANG_CODE, LANG_NAME, SUB_STATUS};
+        Cursor cursor = database.query(LANG_TABLE, columns, SUB_STATUS + "=?", new String[]{"Y"},
+                null, null, LANG_NAME); // order by phrase alphabetically
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        return cursor;
     }
 }
 
