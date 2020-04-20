@@ -16,13 +16,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ibm.cloud.sdk.core.http.HttpMediaType;
 import com.ibm.cloud.sdk.core.security.Authenticator;
 import com.ibm.cloud.sdk.core.security.IamAuthenticator;
+import com.ibm.cloud.sdk.core.service.exception.BadRequestException;
+import com.ibm.cloud.sdk.core.service.exception.NotFoundException;
 import com.ibm.watson.developer_cloud.android.library.audio.StreamPlayer;
 import com.ibm.watson.language_translator.v3.LanguageTranslator;
 import com.ibm.watson.language_translator.v3.model.TranslateOptions;
 import com.ibm.watson.language_translator.v3.model.TranslationResult;
 import com.ibm.watson.text_to_speech.v1.TextToSpeech;
+import com.ibm.watson.text_to_speech.v1.model.SynthesizeOptions;
 
 import java.util.ArrayList;
 
@@ -59,7 +63,7 @@ public class ActTranslate extends ActCommon {
 
     //Text to Speech
     private StreamPlayer player = new StreamPlayer();
-    private TextToSpeech textService;
+    private TextToSpeech text2SpeechService;
 
     private String switchValue = "one";
     private String selectedPhrase;
@@ -89,6 +93,21 @@ public class ActTranslate extends ActCommon {
         btnTranslate = findViewById(R.id.btnTranslate);
         btnT2Speech = findViewById(R.id.btnT2Speech);
         tvTranslation = findViewById(R.id.tvTranslation);
+
+        initializeTranslationService();
+        initializeText2SpeechService();
+    }
+
+    private void initializeTranslationService() {
+        Authenticator authenticator = new IamAuthenticator(getString(R.string.language_translator_apikey));
+        translationService = new LanguageTranslator("2018-05-01", authenticator);
+        translationService.setServiceUrl(getString(R.string.language_translator_url));
+    }
+
+    private void initializeText2SpeechService() {
+        Authenticator authenticator = new IamAuthenticator(getString(R.string.text_speech_apikey));
+        text2SpeechService = new TextToSpeech(authenticator);
+        text2SpeechService.setServiceUrl(getString(R.string.text_speech_url));
     }
 
     private void setupDbManager() {
@@ -162,7 +181,6 @@ public class ActTranslate extends ActCommon {
             @Override
             public void onPhraseItemClick(int position, String text) {
                 selectedPhrase = text;
-                Toast.makeText(ActTranslate.this, selectedPhrase, Toast.LENGTH_SHORT).show(); // Testing
             }
         });
 
@@ -181,7 +199,6 @@ public class ActTranslate extends ActCommon {
                     switchValue = "one";
                     switchSelection.setText(getString(R.string.translate_single_phrase));
                 }
-                Toast.makeText(ActTranslate.this, switchSelection.getText(), Toast.LENGTH_SHORT).show();   // Testing
             }
         });
 
@@ -214,17 +231,29 @@ public class ActTranslate extends ActCommon {
             }
         });
 
+        btnT2Speech.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (switchValue.equals("one")) {
+                    if (tvTranslation.getText() != null && !tvTranslation.getText().toString().trim().isEmpty()) {
+                        pronounceTranslation(tvTranslation.getText().toString().trim());
+                    } else {
+                        Toast.makeText(ActTranslate.this, "Please translate a phrase first", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+
         selectedLangCode = listSubLang.get(0).getLanguageCode();
         switchSelection.setChecked(false);
     }
 
     private void translateSinglePhrase() {
-        // Initialize translation service
-        Authenticator authenticator = new IamAuthenticator(getString(R.string.language_translator_apikey));
-        translationService = new LanguageTranslator("2018-05-01", authenticator);
-        translationService.setServiceUrl(getString(R.string.language_translator_url));
-
         new TranslationTask().execute(selectedPhrase, selectedLangCode);
+    }
+
+    private void pronounceTranslation(String translatedText) {
+        new Text2SpeechTask().execute(translatedText);
     }
 
     private class TranslationTask extends AsyncTask<String, Void, String> {
@@ -238,27 +267,68 @@ public class ActTranslate extends ActCommon {
 
         @Override
         protected String doInBackground(String... params) {
-            TranslateOptions translateOptions = new TranslateOptions.Builder()
-                    .addText(params[0])  // for a single text
+            try {
+                TranslateOptions translateOptions = new TranslateOptions.Builder()
+                        .addText(params[0])  // for a single text
 //                    .text() // for a list of text
-                    .source(com.ibm.watson.language_translator.v3.util.Language.ENGLISH)
-                    .target(params[1])
+                        .source(com.ibm.watson.language_translator.v3.util.Language.ENGLISH)
+                        .target(params[1])
+                        .build();
+                TranslationResult result = translationService.translate(translateOptions)
+                        .execute()
+                        .getResult();
+
+                String firstTranslation = result.getTranslations()
+                        .get(0)
+                        .getTranslation();
+                return firstTranslation;
+            } catch (NotFoundException | BadRequestException ex) {
+                // NotFoundException - when translation isn't available for target language
+                // BadRequestException - when source & target languages are same
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String translatedText) {
+            if (translatedText != null) {
+                tvTranslation.setVisibility(View.VISIBLE);
+                tvTranslation.setText(translatedText);
+                btnT2Speech.setBackground(getDrawable(R.drawable.btn_selector));
+            } else {
+                Toast.makeText(ActTranslate.this, "Sorry, Translation unavailable!", Toast.LENGTH_SHORT).show();
+            }
+            btnTranslate.setBackground(getDrawable(R.drawable.btn_selector));
+            btnTranslate.setEnabled(true);
+        }
+    }
+
+    private class Text2SpeechTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(ActTranslate.this, "Please wait...", Toast.LENGTH_SHORT).show();
+            btnT2Speech.setBackground(getDrawable(R.drawable.bg_btn_disabled));
+            btnT2Speech.setEnabled(false);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            SynthesizeOptions synthesizeOptions = new SynthesizeOptions.Builder()
+                    .text(params[0])
+                    .voice(SynthesizeOptions.Voice.EN_US_LISAVOICE)
+                    .accept(HttpMediaType.AUDIO_WAV)
                     .build();
-            TranslationResult result = translationService.translate(translateOptions)
+            player.playStream(text2SpeechService.synthesize(synthesizeOptions)
                     .execute()
-                    .getResult();
-            String firstTranslation = result.getTranslations()
-                    .get(0)
-                    .getTranslation();
-            return firstTranslation;
+                    .getResult());
+            return "Complete";
         }
 
         @Override
         protected void onPostExecute(String s) {
-            btnTranslate.setBackground(getDrawable(R.drawable.btn_selector));
-            btnTranslate.setEnabled(true);
-            tvTranslation.setVisibility(View.VISIBLE);
-            tvTranslation.setText(s);
+            btnT2Speech.setBackground(getDrawable(R.drawable.btn_selector));
+            btnT2Speech.setEnabled(true);
         }
     }
 

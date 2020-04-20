@@ -20,7 +20,7 @@
             android:id="@+id/switchSelection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
+            android:textSize="17sp"
             android:text="@string/translate_single_phrase"
             android:textColor="@color/black" />
 
@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:textSize="15sp"
+                android:textSize="17sp"
                 android:layout_toStartOf="@id/spnSubLang"
                 android:text="@string/hint_select_lang"
                 android:textColor="@color/black" />
@@ -115,7 +115,7 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="7.5dp"
                 android:layout_marginBottom="0dp"
-                android:background="@drawable/btn_selector"
+                android:background="@drawable/bg_btn_disabled"
                 android:padding="7dp"
                 android:src="@drawable/ico_pronounce"
                 android:tint="@color/white" />
@@ -127,7 +127,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:visibility="gone"
-            android:text="[translated_text]"
             android:textColor="@color/green"
             android:textSize="17sp" />
     </LinearLayout>
