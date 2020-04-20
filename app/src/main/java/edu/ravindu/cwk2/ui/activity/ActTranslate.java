@@ -246,7 +246,9 @@ public class ActTranslate extends ActCommon {
             }
         });
 
-        selectedLangCode = listSubLang.get(0).getLanguageCode(); // default value
+        if (listSubLang.size() > 0) {
+            selectedLangCode = listSubLang.get(0).getLanguageCode(); // default value
+        }
         switchSelection.setChecked(false); // default value
     }
 
