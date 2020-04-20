@@ -5,6 +5,7 @@ import android.database.SQLException;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,17 +18,20 @@ import com.ibm.watson.language_translator.v3.model.IdentifiableLanguage;
 import com.ibm.watson.language_translator.v3.model.IdentifiableLanguages;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
 import edu.ravindu.cwk2.model.Language;
 import edu.ravindu.cwk2.ui.adapter.LanguageListAdapter;
-import edu.ravindu.cwk2.ui.event_listener.ClickListener;
+import edu.ravindu.cwk2.ui.event_listener.LangListListener;
 
 import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_CODE;
 import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_ID;
 import static edu.ravindu.cwk2.database.DatabaseHelper.LANG_NAME;
+import static edu.ravindu.cwk2.database.DatabaseHelper.SUB_STATUS;
 
 public class ActLangSub extends ActCommon {
 
@@ -38,15 +42,18 @@ public class ActLangSub extends ActCommon {
     private ListView lvLanguages;
     private ArrayAdapter adapter;
     private ArrayList<Language> listLanguages;
+    private HashMap<Integer, Boolean> mapSubModifiedLangs;
 
     private LanguageTranslator translationService;
-    private List<IdentifiableLanguage> listIdentifiableLanguages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_lang_sub);
         setupActionbar(getString(R.string.btn_lang_sub), true);
+
+        listLanguages = new ArrayList<>();
+        mapSubModifiedLangs = new HashMap<>();
 
         initViews();
         setupDbManager();
@@ -56,6 +63,18 @@ public class ActLangSub extends ActCommon {
     private void initViews() {
         lvLanguages = findViewById(R.id.lvLanguages);
         btnUpdate = findViewById(R.id.btnUpdate);
+
+        // set event listener for update button
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mapSubModifiedLangs.size() > 0) {
+                    saveModificationsToDb();
+                } else {
+                    Toast.makeText(ActLangSub.this, "No new modifications to update", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void setupDbManager() {
@@ -67,22 +86,9 @@ public class ActLangSub extends ActCommon {
         }
     }
 
-    private void showList() {
-        adapter = new LanguageListAdapter(this, R.layout.sub_lang_list_item, listLanguages, new ClickListener() {
-            @Override
-            public void onListItemClickListener(int position, String text) {
-                //TODO
-            }
-        });
-        lvLanguages.setEmptyView(findViewById(R.id.tvEmptyList));
-        lvLanguages.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
-    }
-
     private void getLanguagesFromDb() {
-        listLanguages = new ArrayList<>();
         try {
-            cursor = dbManager.findLanguages();
+            cursor = dbManager.findLanguage();
             if (cursor.getCount() > 0) {
                 for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
@@ -90,6 +96,7 @@ public class ActLangSub extends ActCommon {
                     lang.setLanguageId(cursor.getInt(cursor.getColumnIndex(LANG_ID)));
                     lang.setLanguageCode(cursor.getString(cursor.getColumnIndex(LANG_CODE)));
                     lang.setLanguageName(cursor.getString(cursor.getColumnIndex(LANG_NAME)));
+                    lang.setSubscribeStatus(cursor.getString(cursor.getColumnIndex(SUB_STATUS)));
                     listLanguages.add(lang);
                 }
             } else {
@@ -107,35 +114,51 @@ public class ActLangSub extends ActCommon {
         }
     }
 
-    private void getLanguagesFromService() {
-        translationService = initLanguageTranslatorService(); // translate
-        new TranslationTask().execute();
+    private void showList() {
+        adapter = new LanguageListAdapter(this, R.layout.sub_lang_list_item, listLanguages, new LangListListener() {
+            @Override
+            public void onItemCheckedChanged(int id, boolean isChecked) {
+                mapSubModifiedLangs.put(id, isChecked);
+            }
+        });
+        lvLanguages.setEmptyView(findViewById(R.id.tvEmptyList));
+        lvLanguages.setAdapter(adapter);
     }
 
-    private LanguageTranslator initLanguageTranslatorService() {
+    private void saveModificationsToDb() {
+        int result = 0;
+        for (Map.Entry<Integer, Boolean> entry : mapSubModifiedLangs.entrySet()) {
+            String checkStatus = entry.getValue() ? "Y" : "N";
+            result += dbManager.updateLanguage(entry.getKey(), checkStatus);
+        }
+
+        if (result == mapSubModifiedLangs.size()) {
+            Toast.makeText(ActLangSub.this, "Subscription Successful", Toast.LENGTH_SHORT).show();
+            mapSubModifiedLangs.clear();
+        }
+
+    }
+
+    private void getLanguagesFromService() {
+        //Initialize language translation service
         Authenticator authenticator = new IamAuthenticator(getString(R.string.language_translator_apikey));
-        LanguageTranslator service = new LanguageTranslator(getString(R.string.version_date), authenticator);
-        service.setServiceUrl(getString(R.string.language_translator_url));
-        return service;
+        translationService = new LanguageTranslator(getString(R.string.version_date), authenticator);
+        translationService.setServiceUrl(getString(R.string.language_translator_url));
+
+        new TranslationTask().execute();
     }
 
     private class TranslationTask extends AsyncTask<Void, String, String> {
 
+        private List<IdentifiableLanguage> listIdentifiableLanguages;
+
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            Log.i(TAG, "/// Load languages : pre execute");
             Toast.makeText(ActLangSub.this, "Retrieval started.", Toast.LENGTH_SHORT).show();
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
-            Toast.makeText(ActLangSub.this, "Retrieving data from service...", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
         protected String doInBackground(Void... params) {
-            Log.i(TAG, "/// Load languages : do in background");
             IdentifiableLanguages languages = translationService.listIdentifiableLanguages().execute().getResult();
             listIdentifiableLanguages = languages.getLanguages();
             return "Retrieval completed.";
@@ -143,9 +166,6 @@ public class ActLangSub extends ActCommon {
 
         @Override
         protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            Log.i(TAG, "/// Load languages : post execute");
             Toast.makeText(ActLangSub.this, s, Toast.LENGTH_SHORT).show();
 
             for (IdentifiableLanguage language : listIdentifiableLanguages) {

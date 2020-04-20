@@ -20,7 +20,7 @@ import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
 import edu.ravindu.cwk2.model.Phrase;
 import edu.ravindu.cwk2.ui.adapter.EditListAdapter;
-import edu.ravindu.cwk2.ui.event_listener.ClickListener;
+import edu.ravindu.cwk2.ui.event_listener.PhraseListListener;
 
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
@@ -110,9 +110,9 @@ public class ActEditPhrases extends ActCommon implements View.OnClickListener {
 
     private void showList() {
         getPhrasesFromDb();
-        adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new ClickListener() {
+        adapter = new EditListAdapter(this, R.layout.edit_phrase_list_item, listPhrases, new PhraseListListener() {
             @Override
-            public void onListItemClickListener(int position, String text) {
+            public void onPhraseItemClick(int position, String text) {
                 selectedPhrase = listPhrases.get(position);
                 btnEdit.setEnabled(true);
                 btnEdit.setBackground(getDrawable(R.drawable.btn_selector));

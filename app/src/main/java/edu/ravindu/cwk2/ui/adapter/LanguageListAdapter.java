@@ -16,7 +16,7 @@ import java.util.List;
 
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.model.Language;
-import edu.ravindu.cwk2.ui.event_listener.ClickListener;
+import edu.ravindu.cwk2.ui.event_listener.LangListListener;
 
 /**
  * Created by Ravindu Fernando on 2020-04-13 at 10:25 PM
@@ -26,15 +26,14 @@ public class LanguageListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResource;
     private List<Language> listAllLanguages;
-    private ClickListener clickListener;
-    private int selectedPosition = -1;
+    private LangListListener langListListener;
 
-    public LanguageListAdapter(@NonNull Context context, int resource, @NonNull List<Language> objects, ClickListener listener) {
+    public LanguageListAdapter(@NonNull Context context, int resource, @NonNull List<Language> objects, LangListListener listener) {
         super(context, resource, objects);
         this.context = context;
         this.layoutResource = resource;
         this.listAllLanguages = objects;
-        this.clickListener = listener;
+        this.langListListener = listener;
     }
 
     @NonNull
@@ -52,13 +51,11 @@ public class LanguageListAdapter extends ArrayAdapter {
         viewHolder.cbLang = convertView.findViewById(R.id.cbLang);
 
         viewHolder.tvLang.setText(lang.getLanguageName());
-        viewHolder.cbLang.setChecked(selectedPosition == position);
+        viewHolder.cbLang.setChecked(lang.getSubscribeStatus().equals("Y"));
         viewHolder.cbLang.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                selectedPosition = position;
-                clickListener.onListItemClickListener(position, lang.getLanguageName());
-                notifyDataSetChanged();
+                langListListener.onItemCheckedChanged(lang.getLanguageId(), isChecked);
             }
         });
 

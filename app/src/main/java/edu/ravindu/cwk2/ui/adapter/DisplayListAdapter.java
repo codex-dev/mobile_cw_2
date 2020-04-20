@@ -14,7 +14,7 @@ import java.util.List;
 
 import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.model.Phrase;
-import edu.ravindu.cwk2.ui.event_listener.ClickListener;
+import edu.ravindu.cwk2.ui.event_listener.PhraseListListener;
 
 /**
  * Created by Ravindu Fernando on 2020-04-13 at 12:17 AM
@@ -24,14 +24,12 @@ public class DisplayListAdapter extends ArrayAdapter {
     private Context context;
     private int layoutResource;
     private List<Phrase> listAllPhrases;
-    private ClickListener clickListener;
 
-    public DisplayListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects, ClickListener listener) {
+    public DisplayListAdapter(@NonNull Context context, int resource, @NonNull List<Phrase> objects) {
         super(context, resource, objects);
         this.context = context;
         this.layoutResource = resource;
         this.listAllPhrases = objects;
-        this.clickListener = listener;
     }
 
     @NonNull
@@ -47,12 +45,6 @@ public class DisplayListAdapter extends ArrayAdapter {
 
         viewHolder.tvPhrase = convertView.findViewById(R.id.tvPhrase);
         viewHolder.tvPhrase.setText(p.getPhrase());
-        viewHolder.tvPhrase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                clickListener.onListItemClickListener(position, p.getPhrase());
-            }
-        });
 
         return convertView;
     }

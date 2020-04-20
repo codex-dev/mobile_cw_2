@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -14,10 +13,9 @@ import edu.ravindu.cwk2.R;
 import edu.ravindu.cwk2.database.DatabaseManager;
 import edu.ravindu.cwk2.model.Phrase;
 import edu.ravindu.cwk2.ui.adapter.DisplayListAdapter;
-import edu.ravindu.cwk2.ui.event_listener.ClickListener;
 
-import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
 import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_ID;
+import static edu.ravindu.cwk2.database.DatabaseHelper.PHRASE_TEXT;
 
 public class ActDisplayPhrases extends ActCommon {
 
@@ -54,21 +52,17 @@ public class ActDisplayPhrases extends ActCommon {
 
     private void showList() {
         getPhrasesFromDb();
-        adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases, new ClickListener() {
-            @Override
-            public void onListItemClickListener(int position, String text) {
-                Toast.makeText(ActDisplayPhrases.this, listPhrases.get(position).getPhrase(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        adapter = new DisplayListAdapter(this, R.layout.display_phrase_list_item, listPhrases);
         lvPhrases.setEmptyView(findViewById(R.id.tvEmptyList));
         lvPhrases.setAdapter(adapter);
     }
 
     private void getPhrasesFromDb() {
         listPhrases = new ArrayList<>();
-        try{cursor = dbManager.findPhrases();
+        try {
+            cursor = dbManager.findPhrases();
             if (cursor.getCount() > 0) {
-                for(int i=0; i<cursor.getCount(); i++){
+                for (int i = 0; i < cursor.getCount(); i++) {
                     cursor.moveToPosition(i);
                     Phrase p = new Phrase();
                     p.setPhraseId(cursor.getInt(cursor.getColumnIndex(PHRASE_ID)));

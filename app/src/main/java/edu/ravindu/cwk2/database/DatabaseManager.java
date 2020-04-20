@@ -62,7 +62,7 @@ public class DatabaseManager {
 
     public void deletePhrase(int id) {
 //        database.delete(PHRASE_TABLE, PHRASE_ID + "=" + id, null);
-        database.delete(PHRASE_TABLE, PHRASE_ID + "=?" , new String[]{String.valueOf(id)});
+        database.delete(PHRASE_TABLE, PHRASE_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     public void insertLanguage(String langCode, String langName, String subStatus) {
@@ -73,8 +73,8 @@ public class DatabaseManager {
         database.insert(LANG_TABLE, null, contentValue);
     }
 
-    public Cursor findLanguages() throws NullPointerException {
-        String[] columns = new String[]{LANG_ID,LANG_CODE,LANG_NAME};
+    public Cursor findLanguage() throws NullPointerException {
+        String[] columns = new String[]{LANG_ID, LANG_CODE, LANG_NAME, SUB_STATUS};
         Cursor cursor = database.query(LANG_TABLE, columns, null, null,
                 null, null, LANG_NAME); // order by phrase alphabetically
         if (cursor != null) {
@@ -82,10 +82,17 @@ public class DatabaseManager {
         }
         return cursor;
     }
+
+    public int updateLanguage(int id, String subStatus) {
+        ContentValues values = new ContentValues();
+        values.put(SUB_STATUS, subStatus);
+        int updatedRowCount = database.update(LANG_TABLE, values, LANG_ID + " = ?", new String[]{String.valueOf(id)});
+        return updatedRowCount;
+    }
 }
 
 /*
-* References -
-* https://www.youtube.com/watch?v=jNrLy_37eh8
-* https://www.youtube.com/watch?v=Wphc2q0dH_8
-* */
+ * References -
+ * https://www.youtube.com/watch?v=jNrLy_37eh8
+ * https://www.youtube.com/watch?v=Wphc2q0dH_8
+ * */
