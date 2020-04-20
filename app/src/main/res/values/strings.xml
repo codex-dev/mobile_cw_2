@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mobile Coursework 2</string>
+    <string name="app_name">Word Mate</string>
 
     <!--  IBM cloud credentials  -->
     <string name="version_date">2018-05-01</string>

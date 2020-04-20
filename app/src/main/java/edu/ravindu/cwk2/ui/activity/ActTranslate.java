@@ -240,12 +240,14 @@ public class ActTranslate extends ActCommon {
                     } else {
                         Toast.makeText(ActTranslate.this, "Please translate a phrase first", Toast.LENGTH_SHORT).show();
                     }
+                } else if(switchValue.equals("all")){
+                    //TODO speak phrase translation selected from list
                 }
             }
         });
 
-        selectedLangCode = listSubLang.get(0).getLanguageCode();
-        switchSelection.setChecked(false);
+        selectedLangCode = listSubLang.get(0).getLanguageCode(); // default value
+        switchSelection.setChecked(false); // default value
     }
 
     private void translateSinglePhrase() {
